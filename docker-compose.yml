@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: localhost
+      
+      POSTGRES_PASSWORD: suraj@123
+      POSTGRES_DB: dockerTest
+    ports:
+      - "5051:5432"
+    volumes: 
+      - postgres-data:/var/lib/postgresql/data
+      
+      
+  app:
+    build: .
+    container_name: my_app_container
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dockerTest
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: suraj@123
+
+volumes:
+  postgres-data:
